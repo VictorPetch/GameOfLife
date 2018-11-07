@@ -6,6 +6,9 @@ function Board(width = 720, height = 400, w = 40) {
     this.points = new Array();
     this.board = new Array(this.columns);
     this.destination = p5.Vector.random2D()
+    this.startPoint = p5.Vector.random2D()
+    this.erasePoint = p5.Vector.random2D()
+
     for (var i = 0; i < this.columns; i++) {
         this.board[i] = new Array(this.rows);
     }
@@ -37,7 +40,8 @@ Board.prototype.show = function () {
             //console.log(this.board[i][j])
             if ((this.board[i][j] == 1)) fill(0);
             else if ((this.board[i][j] == 0)) fill(255);
-            else fill(255, 0, 0);
+            else if ((this.board[i][j] == 2)) fill(255,0,0);
+            else fill(0, 255, 0);
 
             stroke(0);
             rect(i * this.w, j * this.w, this.w - 1, this.w - 1);
@@ -62,8 +66,18 @@ Board.prototype.addPoint = function () {
 }
 
 Board.prototype.addDest = function () {
-    console.log("************************")
     this.destination = createVector(floor(mouseX / this.w), floor(mouseY / this.w))
     this.board[this.destination.x][this.destination.y] = 2
 
+}
+
+Board.prototype.addCarPoint = function() {
+    this.startPoint = createVector(floor(mouseX / this.w), floor(mouseY / this.w))
+    console.log(this.startPoint);
+    this.board[this.startPoint.x][this.startPoint.y] = 3
+}
+
+Board.prototype.Erase = function(){
+    this.erasePoint = createVector(floor(mouseX / this.w), floor(mouseY / this.w))
+    this.board[this.erasePoint.x][this.erasePoint.y] = 0
 }
