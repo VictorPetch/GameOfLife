@@ -1,9 +1,12 @@
 
 var b;
+var c;
+var seila;
 var addPoint = false;
 var addDest = false;
 var addCar = false;
 var erase = false;
+var start = false;
 var CarPoint = p5.Vector.random2D()
 var cars = [];
 
@@ -29,18 +32,26 @@ function mousePressed() {
         b.addDest();
         addDest = !addDest;
     }
-    if(addCar){
-        console.log("CarPoint ON")
+    if(addCar){                         // Cada vez que C estiver apertado e o mouse for clicado,
+        console.log("CarPoint ON")      // vao ser criados n carros com um vetor de movimentos cada.
         b.addCarPoint();
-        for(var i =0; i < 30; i++){
-            cars.push(new Car(b.startPoint.x, b.startPoint.y))
-        }
+        for(var i =0; i < 2; i++){
+            cars.push(new Car(b.startPoint.x, b.startPoint.y));
+            cars[i].movements = [floor(random(4)),floor(random(4)),floor(random(4)),floor(random(4)),
+                                floor(random(4)),floor(random(4)),floor(random(4)),floor(random(4)),
+                                floor(random(4)),floor(random(4)),floor(random(4)),floor(random(4)),
+                                floor(random(4)),floor(random(4)),floor(random(4)),floor(random(4)),
+                                floor(random(4)),floor(random(4)),floor(random(4)),floor(random(4))];
+            
+        };
         addCar = !addCar;
     }
     if(erase){
         console.log("Erase ON")
         b.Erase();
     }
+    
+    
 
 }
 
@@ -54,6 +65,37 @@ function keyPressed() {
         addCar = !addCar
     }else if (keyCode === 69){
         erase = !erase
+    }else if(keyCode == 83){
+
+        console.log("Let's start, shall we?");
+        if(cars.length > 0){
+            for(var j =0; j < 2; j++){
+                console.log("J:", j)
+                
+                for(var i = 0; i < 16; i++){ //Movimenta todos os carros 1 mov.
+                    
+                    cars[0].directionalMove(w = j);
+                    
+                    
+                }
+                for(var v =0;v < cars.length; v++){ //Pinta todos os carros depois de 1 mov.
+                    b.board[cars[v].x][cars[v].y] = 4;
+                }
+            
+                setTimeout(b.show, 20000)
+                
+
+                
+
+                
+            }
+            console.log(cars[0].movements)
+            console.log(cars[1].movements)
+            
+        }else console.log("Deu ruim no start");
+        
+
+
         
     }
 }

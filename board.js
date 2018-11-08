@@ -23,7 +23,6 @@ function Board(width = 720, height = 400, w = 40) {
         for (var j = 0; j < this.rows; j++) {
             // Lining the edges with 0s
             this.board[i][j] = 0;
-
             this.next[i][j] = 0;
         }
     }
@@ -41,7 +40,8 @@ Board.prototype.show = function () {
             if ((this.board[i][j] == 1)) fill(0);
             else if ((this.board[i][j] == 0)) fill(255);
             else if ((this.board[i][j] == 2)) fill(255,0,0);
-            else fill(0, 255, 0);
+            else if (this.board[i][j] == 3) fill(0, 255, 0);
+            else fill(0,0,255);
 
             stroke(0);
             rect(i * this.w, j * this.w, this.w - 1, this.w - 1);
