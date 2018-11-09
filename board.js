@@ -66,12 +66,14 @@ Board.prototype.addPoint = function () {
 }
 
 Board.prototype.RandomSquare = function () {
-
+    console.log(this.points)
     this.points.push(createVector(floor(mouseX / this.w), floor(mouseY / this.w)))
-    for (var i = 0; i < this.points.length; i++) {
+    for (var i = this.points.length -1; i < this.points.length; i++) {
+
         for(var j = this.points[i].x -3; j< this.points[i].x +3; j++){
-            for(var k = this.points[i].y -3; k < this.points[i]+3; k++){
-                this.board[this.points[i].x][this.points[i].y] = floor(random(0,2))
+
+            for(var k = this.points[i].y -3; k < this.points[i].y+3; k++){
+                 this.board[j][k] = floor(random(0,2))
             }
 
         }
