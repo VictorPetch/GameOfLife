@@ -1,7 +1,14 @@
 
 var b;
+var b_prev;
+var Copy_bool = true;
 var c;
-var seila;
+var Epoch =0;
+var Num_car = 1;
+var Num_mov = 20;
+var j_global =true;
+var i_global =0;
+var z_global=0;
 var addPoint = false;
 var addDest = false;
 var addCar = false;
@@ -10,10 +17,12 @@ var start = false;
 var CarPoint = p5.Vector.random2D()
 var cars = [];
 
+
 function setup() {
     createCanvas(1280, 640);
     b = new Board(1280, 640, 20);
-
+    b_prev = new Board(1280,640,20)
+    
     
 }
 
@@ -25,7 +34,7 @@ function draw() {
 function mousePressed() {
     if (addPoint) {
         console.log("Point ON")
-        b.addPoint();
+        b.RandomSquare();
     }
     if (addDest) {
         console.log("Dest ON")
@@ -35,7 +44,7 @@ function mousePressed() {
     if(addCar){                         // Cada vez que C estiver apertado e o mouse for clicado,
         console.log("CarPoint ON")      // vao ser criados n carros com um vetor de movimentos cada.
         b.addCarPoint();
-        for(var i =0; i < 2; i++){
+        for(var i =0; i < Num_car; i++){
             cars.push(new Car(b.startPoint.x, b.startPoint.y));
             cars[i].movements = [floor(random(4)),floor(random(4)),floor(random(4)),floor(random(4)),
                                 floor(random(4)),floor(random(4)),floor(random(4)),floor(random(4)),
@@ -59,17 +68,69 @@ function keyPressed() {
     console.log(keyCode)
     if (keyCode === 65) {
         addPoint = !addPoint
-    } else if (keyCode === 68) { 
+    }else if (keyCode === 68) { 
         addDest = !addDest;
-    } else if (keyCode === 67){
+    }else if (keyCode === 67){
         addCar = !addCar
     }else if (keyCode === 69){
         erase = !erase
     }else if(keyCode == 83){
-
-        console.log("Let's start, shall we?");
+        if(Copy_bool){
+            b_prev.Copy(b.board)
+            Copy_bool = false;
+        }
+        
         if(cars.length > 0){
-            for(var j =0; j < 2; j++){
+            console.log("Let's start, shall we?");
+            setInterval(function(){
+                Car_draw(i_global);
+                if(i_global > Num_mov){
+                    console.log("Acabou a Epoch", Epoch);
+                    Epoch++;
+                    i_global=0
+                    for(var i=0; i<Num_car; i++){
+                        cars[i].x = b.startPoint.x;
+                        cars[i].y = b.startPoint.y;
+                    }
+                    b.Copy(b_prev.board);
+                    //COLOCA AQUI O ALGORITMO GENETICO QUE ALTERA O VETOR DE MOVIMENTO
+                }else i_global++
+                //if acabou a época(vetor de movimento ja rodou todo):
+                //i_global=0
+                //algoritmo genetico no vetor de movimento
+                //else:
+               
+            },200);
+              
+        }
+            
+
+    }
+    else if(keyCode == 87){
+         //Acho q n precisa disso aqui
+            
+    }//else console.log("Acho que faltou o StartPoint");
+}
+
+function Car_draw(){
+    for(var i =0; i < Num_car; i++){
+        
+        b.board[cars[i].x][cars[i].y] = b_prev.board[cars[i].x][cars[i].y];
+        cars[i].directionalMove(i_global)
+        if(b.board[cars[i].x][cars[i].y] == 1){
+           cars[i].DesMove(i_global);
+           b.board[cars[i].x][cars[i].y] = 4
+        }else b.board[cars[i].x][cars[i].y] = 4;
+        
+
+    }
+}
+
+   
+
+//
+
+/*for(var j =0; j < 2; j++){
                 console.log("J:", j)
                 
                 for(var i = 0; i < 16; i++){ //Movimenta todos os carros 1 mov.
@@ -90,12 +151,4 @@ function keyPressed() {
                 
             }
             console.log(cars[0].movements)
-            console.log(cars[1].movements)
-            
-        }else console.log("Deu ruim no start");
-        
-
-
-        
-    }
-}
+            console.log(cars[1].movements) */

@@ -54,7 +54,7 @@ Board.prototype.addPoint = function () {
 
     this.points.push(createVector(floor(mouseX / this.w), floor(mouseY / this.w)))
     for (var x = 0; x < this.points.length; x++) {
-        //this.points[x] = createVector(floor(random(this.columns)), floor(random(this.rows)));
+        
         for (var i = 0; i < this.rows; i++) {
             this.board[this.points[x].x][i] = 1
         }
@@ -65,6 +65,19 @@ Board.prototype.addPoint = function () {
 
 }
 
+Board.prototype.RandomSquare = function () {
+
+    this.points.push(createVector(floor(mouseX / this.w), floor(mouseY / this.w)))
+    for (var i = 0; i < this.points.length; i++) {
+        for(var j = this.points[i].x -3; j< this.points[i].x +3; j++){
+            for(var k = this.points[i].y -3; k < this.points[i]+3; k++){
+                this.board[this.points[i].x][this.points[i].y] = floor(random(0,2))
+            }
+
+        }
+    }
+
+}
 Board.prototype.addDest = function () {
     this.destination = createVector(floor(mouseX / this.w), floor(mouseY / this.w))
     this.board[this.destination.x][this.destination.y] = 2
@@ -80,4 +93,19 @@ Board.prototype.addCarPoint = function() {
 Board.prototype.Erase = function(){
     this.erasePoint = createVector(floor(mouseX / this.w), floor(mouseY / this.w))
     this.board[this.erasePoint.x][this.erasePoint.y] = 0
+}
+Board.prototype.Haha = function(i=0){
+    for( i; i<3; i++){
+        console.log(i)
+
+
+    }
+
+}
+Board.prototype.Copy = function(another_board){
+    for(var i=0; i<this.rows; i++){
+        for(var j=0; j<this.columns; j++){
+            this.board[i][j] = another_board[i][j]
+        }
+    }
 }
