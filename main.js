@@ -89,13 +89,20 @@ function keyPressed() {
                     console.log("Acabou a Epoch", Epoch);
                     Epoch++;
                     i_global=0
-                    for(var i=0; i<Num_car; i++){ //Faz a fitness de todos os carros
-                        console.log(cars[i].Fitness(b.destination.x, b.destination.y))
-                    }
+                    console.log("StartPoint", b.startPoint)
+                    console.log("Antes da ordenação", cars)
+                    cars.sort(function(a,c){
+                        var Erro_a = abs(b.destination.x - a.x) + abs(b.destination.y - a.y)
+                        var Erro_b = abs(b.destination.x - c.x) + abs(b.destination.y - c.y)
+                        return Erro_a - Erro_b;
+                    })
+                    console.log("Depois da ordenação",cars)
+
                     for(var i=0; i<Num_car; i++){ // Leva todos os carros pro ponto inicial
                         cars[i].x = b.startPoint.x;
                         cars[i].y = b.startPoint.y;
                     }
+                    
                     b.Copy(b_prev.board);
 
                     
@@ -126,6 +133,15 @@ function Car_draw(){
         
 
     }
+}
+function Fitness(cars,Destination){
+    var Error = new Array();
+    for (car in cars){
+        Error.push(abs(Destination.x - car.x) + abs(Destination.y - car.y ))
+
+    }
+    return Error;
+
 }
 
    
