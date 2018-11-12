@@ -4,7 +4,7 @@ var b_prev;
 var Copy_bool = true;
 var c;
 var Epoch =0;
-var Num_car = 1;
+var Num_car = 30;
 var Num_mov = 20;
 var j_global =true;
 var i_global =0;
@@ -16,6 +16,7 @@ var erase = false;
 var start = false;
 var CarPoint = p5.Vector.random2D()
 var cars = [];
+var fitness = [];
 
 
 function setup() {
@@ -88,17 +89,18 @@ function keyPressed() {
                     console.log("Acabou a Epoch", Epoch);
                     Epoch++;
                     i_global=0
-                    for(var i=0; i<Num_car; i++){
+                    for(var i=0; i<Num_car; i++){ //Faz a fitness de todos os carros
+                        console.log(cars[i].Fitness(b.destination.x, b.destination.y))
+                    }
+                    for(var i=0; i<Num_car; i++){ // Leva todos os carros pro ponto inicial
                         cars[i].x = b.startPoint.x;
                         cars[i].y = b.startPoint.y;
                     }
                     b.Copy(b_prev.board);
-                    //COLOCA AQUI O ALGORITMO GENETICO QUE ALTERA O VETOR DE MOVIMENTO
+
+                    
                 }else i_global++
-                //if acabou a época(vetor de movimento ja rodou todo):
-                //i_global=0
-                //algoritmo genetico no vetor de movimento
-                //else:
+               
                
             },200);
               

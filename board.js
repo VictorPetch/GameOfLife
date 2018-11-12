@@ -70,9 +70,9 @@ Board.prototype.RandomSquare = function () {
     this.points.push(createVector(floor(mouseX / this.w), floor(mouseY / this.w)))
     for (var i = this.points.length -1; i < this.points.length; i++) {
 
-        for(var j = this.points[i].x -3; j< this.points[i].x +3; j++){
+        for(var j = this.points[i].x -15; j< this.points[i].x +15; j++){
 
-            for(var k = this.points[i].y -3; k < this.points[i].y+3; k++){
+            for(var k = this.points[i].y -15; k < this.points[i].y+15; k++){
                  this.board[j][k] = floor(random(0,2))
             }
 
