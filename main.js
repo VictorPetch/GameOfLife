@@ -3,12 +3,12 @@ var b;
 var b_prev;
 var Copy_bool = true;
 var c;
-var Epoch =0;
+var Epoch = 0;
 var Num_car = 30;
 var Num_mov = 20;
-var j_global =true;
-var i_global =0;
-var z_global=0;
+var j_global = true;
+var i_global = 0;
+var z_global = 0;
 var addPoint = false;
 var addDest = false;
 var addCar = false;
@@ -22,9 +22,9 @@ var fitness = [];
 function setup() {
     createCanvas(1280, 640);
     b = new Board(1280, 640, 20);
-    b_prev = new Board(1280,640,20)
-    
-    
+    b_prev = new Board(1280, 640, 20)
+
+
 }
 
 function draw() {
@@ -42,26 +42,22 @@ function mousePressed() {
         b.addDest();
         addDest = !addDest;
     }
-    if(addCar){                         // Cada vez que C estiver apertado e o mouse for clicado,
+    if (addCar) {                         // Cada vez que C estiver apertado e o mouse for clicado,
         console.log("CarPoint ON")      // vao ser criados n carros com um vetor de movimentos cada.
         b.addCarPoint();
-        for(var i =0; i < Num_car; i++){
+        for (var i = 0; i < Num_car; i++) {
             cars.push(new Car(b.startPoint.x, b.startPoint.y));
-            cars[i].movements = [floor(random(4)),floor(random(4)),floor(random(4)),floor(random(4)),
-                                floor(random(4)),floor(random(4)),floor(random(4)),floor(random(4)),
-                                floor(random(4)),floor(random(4)),floor(random(4)),floor(random(4)),
-                                floor(random(4)),floor(random(4)),floor(random(4)),floor(random(4)),
-                                floor(random(4)),floor(random(4)),floor(random(4)),floor(random(4))];
-            
+
+
         };
         addCar = !addCar;
     }
-    if(erase){
+    if (erase) {
         console.log("Erase ON")
         b.Erase();
     }
-    
-    
+
+
 
 }
 
@@ -69,66 +65,66 @@ function keyPressed() {
     console.log(keyCode)
     if (keyCode === 65) {
         addPoint = !addPoint
-    }else if (keyCode === 68) { 
+    } else if (keyCode === 68) {
         addDest = !addDest;
-    }else if (keyCode === 67){
+    } else if (keyCode === 67) {
         addCar = !addCar
-    }else if (keyCode === 69){
+    } else if (keyCode === 69) {
         erase = !erase
-    }else if(keyCode == 83){
-        if(Copy_bool){
+    } else if (keyCode == 83) { // S
+        if (Copy_bool) {
             b_prev.Copy(b.board)
             Copy_bool = false;
         }
-        
-        if(cars.length > 0){
+
+        if (cars.length > 0) {
             console.log("Let's start, shall we?");
-            setInterval(function(){
+            setInterval(function () {
                 Car_draw(i_global);
-                if(i_global > Num_mov){
+                if (i_global > Num_mov) {
                     console.log("Acabou a Epoch", Epoch);
                     Epoch++;
-                    i_global=0
-                    for(var i=0; i<Num_car; i++){ //Faz a fitness de todos os carros
+                    i_global = 0
+                    for (var i = 0; i < Num_car; i++) { //Faz a fitness de todos os carros
                         console.log(cars[i].Fitness(b.destination.x, b.destination.y))
                     }
-                    for(var i=0; i<Num_car; i++){ // Leva todos os carros pro ponto inicial
+                    for (var i = 0; i < Num_car; i++) { // Leva todos os carros pro ponto inicial
                         cars[i].x = b.startPoint.x;
                         cars[i].y = b.startPoint.y;
                     }
                     b.Copy(b_prev.board);
 
-                    
-                }else i_global++
-               
-               
-            },200);
-              
+
+                } else i_global++
+
+
+            }, 200);
+
         }
-            
+
 
     }
-    else if(keyCode == 87){
-         //Acho q n precisa disso aqui
-            
+    else if (keyCode == 87) {
+        //Acho q n precisa disso aqui
+
     }//else console.log("Acho que faltou o StartPoint");
 }
 
-function Car_draw(){
-    for(var i =0; i < Num_car; i++){
-        
+function Car_draw() {
+    for (var i = 0; i < Num_car; i++) {
+
         b.board[cars[i].x][cars[i].y] = b_prev.board[cars[i].x][cars[i].y];
         cars[i].directionalMove(i_global)
-        if(b.board[cars[i].x][cars[i].y] == 1){
-           cars[i].DesMove(i_global);
-           b.board[cars[i].x][cars[i].y] = 4
-        }else b.board[cars[i].x][cars[i].y] = 4;
-        
+        if (b.board[cars[i].x][cars[i].y] == 1) {
+            cars[i].DesMove(i_global);
+            b.board[cars[i].x][cars[i].y] = 4
+        } else b.board[cars[i].x][cars[i].y] = 4;
+
 
     }
 }
 
-   
+
 
 //
 
