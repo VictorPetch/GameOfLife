@@ -48,8 +48,8 @@ function Car(X, Y) {
         else console.log("Wrong directionalMove parameter");
 
     };
-    this.Fitness = function (Dest_x, Dest_y) {
-        return abs(Dest_x - this.x) + abs(Dest_y - this.y)
+    this.Fitness = function(Dest_x, Dest_y){
+        this.Error = abs(Dest_x - this.x)+ abs(Dest_y - this.y )
 
     }
 };

@@ -17,6 +17,7 @@ var start = false;
 var CarPoint = p5.Vector.random2D()
 var cars = [];
 var fitness = [];
+var Error = [];
 
 
 function setup() {
@@ -84,11 +85,14 @@ function keyPressed() {
                 if (i_global > Num_mov) {
                     console.log("Acabou a Epoch", Epoch);
                     Epoch++;
-                    i_global = 0
-                    for (var i = 0; i < Num_car; i++) { //Faz a fitness de todos os carros
-                        console.log(cars[i].Fitness(b.destination.x, b.destination.y))
+                    i_global=0
+                    for(var i=0; i<Num_car; i++){ //Faz a fitness de todos os carros
+                        cars[i].Fitness(b.destination.x, b.destination.y)     
                     }
-                    for (var i = 0; i < Num_car; i++) { // Leva todos os carros pro ponto inicial
+                    cars.sort(function(a, b) {
+                        return a.Error - b.Error;
+                    }); 
+                    for(var i=0; i<Num_car; i++){ // Leva todos os carros pro ponto inicial
                         cars[i].x = b.startPoint.x;
                         cars[i].y = b.startPoint.y;
                     }
