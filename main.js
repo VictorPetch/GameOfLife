@@ -92,6 +92,7 @@ function keyPressed() {
                         cars[i].x = b.startPoint.x;
                         cars[i].y = b.startPoint.y;
                     }
+
                     b.Copy(b_prev.board);
 
 
@@ -123,7 +124,34 @@ function Car_draw() {
 
     }
 }
+function Fitness(cars, Destination) {
+    var Error = new Array();
+    for (car in cars) {
+        Error.push(abs(Destination.x - car.x) + abs(Destination.y - car.y))
 
+    }
+    return Error;
+
+}
+
+
+function selection(cars) {
+    //pegar os 4 melhores deixar passar
+    //pegar os n aleatórios e fazer reprodução dos dois melhores 14x
+    // e mutação nos dois ultimos
+    newCars = new Array(cars.length)
+
+    //Deixando passar os 4 melhores
+    for (x = 0; x < 4; x++) {
+        newCars[x] = cars[x];
+    }
+
+    for (x = 4; x < 14; x++) {
+        newCars[x] = cars[x];
+    }
+
+
+}
 
 
 //
