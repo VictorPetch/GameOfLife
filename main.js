@@ -4,8 +4,8 @@ var b_prev;
 var Copy_bool = true;
 var c;
 var Epoch = 0;
-var Num_car = 30;
-var Num_mov = 20;
+var Num_car = 100;
+var Num_mov = 60;
 var j_global = true;
 var i_global = 0;
 var z_global = 0;
@@ -92,6 +92,11 @@ function keyPressed() {
                     cars.sort(function(a, b) {
                         return a.Error - b.Error;
                     }); 
+                    console.log("Antes",cars)
+                    selection(cars);
+                    console.log("Dps", cars)
+
+
                     for(var i=0; i<Num_car; i++){ // Leva todos os carros pro ponto inicial
                         cars[i].x = b.startPoint.x;
                         cars[i].y = b.startPoint.y;
@@ -103,7 +108,7 @@ function keyPressed() {
                 } else i_global++
 
 
-            }, 200);
+            }, 50);
 
         }
 
@@ -128,6 +133,7 @@ function Car_draw() {
 
     }
 }
+//Isso daqui tem que ir embora
 function Fitness(cars, Destination) {
     var Error = new Array();
     for (car in cars) {
@@ -140,24 +146,74 @@ function Fitness(cars, Destination) {
 
 
 function selection(cars) {
-    //pegar os 4 melhores deixar passar
-    //pegar os n aleatórios e fazer reprodução dos dois melhores 14x
-    // e mutação nos dois ultimos
+    Temp = new Array()
     newCars = new Array(cars.length)
 
-    //Deixando passar os 4 melhores
-    for (x = 0; x < 4; x++) {
-        newCars[x] = cars[x];
+    //Cópia do vetor de carros pra alterar os movimentos
+    for (var i = 0; i < cars.length; i++) {
+        newCars[i] = new Car(cars[i].x, cars[i].y);
+        newCars[i].CopyMov(cars[i])
     }
+    //Preenchendo de 4 até 28 com reprodução(na vdd só altera os movimentos de 4 a 18)
+    for (var x = 1; x < floor(cars.length * 0.98); x++) {
+        
 
-    for (x = 4; x < 14; x++) {
-        newCars[x] = cars[x];
+        //Enche um vetor com  n carros aleatorios
+        var rand = floor(random(2,cars.length))
+        Temp3 = new Array() 
+
+        for(y = 0;y <rand; y++ ){
+            var rand2 = floor(random(0,cars.length))
+            if(!Repeated(rand2, Temp3)){
+                Temp.push(cars[rand2])
+
+            }
+
+        }
+
+
+        //Ordena e pega os 2 melhores
+        Temp.sort(function(a, b) {
+            
+            return a.Error - b.Error
+            
+        }); 
+
+        newCars[x].CopyMov(Reproduction(Temp[0], Temp[1])) 
+        Temp = new Array()
     }
-
-
+    //Fazer a mutaçao
+    var rand = floor(random(0,10))
+    for(var x = floor(cars.length * 0.98); x < cars.length; x++){
+        if(rand < 5 ){
+            var rand2 = floor(random(0,cars[2].movements.length))
+            newCars[x].movements[rand2] = floor(random(0,4))
+        }
+    }
+    for (var x = 0; x < cars.length; x++) {
+        cars[x].CopyMov(newCars[x])
+    }
+    
+    
 }
-
-
+function Reproduction(Car1, Car2){
+    var Temp2 = new Car()
+    var rand = floor(random(0,Car1.movements.length)    )
+    for(i = 0; i< rand; i++){   
+        Temp2.movements[i] = Car1.movements[i]
+    }
+    for(i = rand; i< Car2.movements.length;i++){
+        Temp2.movements[i] = Car2.movements[i]
+    }
+    return Temp2
+}
+function Repeated(rand2, Temp3){
+    for(var x =0; x < Temp3.length; x++){
+        if(Temp3[x] == rand2) return true
+        
+    }
+    return false;
+}
 //
 
 /*for(var j =0; j < 2; j++){

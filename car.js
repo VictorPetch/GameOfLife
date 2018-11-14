@@ -1,11 +1,14 @@
-function Car(X, Y) {
+function Car(X =0, Y=0) {
     this.x = X;
     this.y = Y;
     this.movements = new Array(60);
     for (var x = 0; x < this.movements.length; x++) {
         this.movements[x] = floor(random(4));
     }
+    this.CopyMov = function(Car){
+        this.movements = Car.movements
 
+    }
     this.incrementalMove = function (X, Y) {
         this.x += X;
         this.y += Y;
@@ -49,7 +52,7 @@ function Car(X, Y) {
 
     };
     this.Fitness = function(Dest_x, Dest_y){
-        this.Error = abs(Dest_x - this.x)+ abs(Dest_y - this.y )
+        this.Error = abs(Dest_x - this.x) + abs(Dest_y - this.y ) + 1;
 
     }
 };
