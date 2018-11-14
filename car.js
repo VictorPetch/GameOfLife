@@ -2,6 +2,7 @@ function Car(X,Y) {
     this.x = X;
     this.y = Y;
     this.movements = new Array();
+    this.Error
 
     this.incrementalMove = function(X,Y) {
       this.x += X;
@@ -46,7 +47,7 @@ function Car(X,Y) {
 
     };
     this.Fitness = function(Dest_x, Dest_y){
-        return abs(Dest_x - this.x)+ abs(Dest_y - this.y )
+        this.Error = abs(Dest_x - this.x)+ abs(Dest_y - this.y )
 
     }
   };
