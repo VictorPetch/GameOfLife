@@ -4,7 +4,7 @@ var b_prev;
 var Copy_bool = true;
 var c;
 var Epoch = 0;
-var Num_car = 100;
+var Num_car = 100   ;
 var Num_mov = 60;
 var j_global = true;
 var i_global = 0;
@@ -146,7 +146,7 @@ function Fitness(cars, Destination) {
 
 
 function selection(cars) {
-    Temp = new Array()
+    bestCars_Array = new Array()
     newCars = new Array(cars.length)
 
     //Cópia do vetor de carros pra alterar os movimentos
@@ -154,58 +154,66 @@ function selection(cars) {
         newCars[i] = new Car(cars[i].x, cars[i].y);
         newCars[i].CopyMov(cars[i])
     }
-    //Preenchendo de 4 até 28 com reprodução(na vdd só altera os movimentos de 4 a 18)
-    for (var x = 1; x < floor(cars.length * 0.98); x++) {
+       
         
+    //Mutação - começa em 5% e termina em 10% do vetor de newCars
+    for(var i=round(cars.length * 0.05); i < round(cars.length * 0.1); i++){
+        var rand1 = round(random(0,cars.length));
+        var rand2 = round(random(0,cars[2].movements.length));
+        cars[rand1].movements[rand2] = floor(random(0,4))
+        newCars[i] = cars[rand1];
+
+    }
+
+    //Preenchendo de 10% até o resto com reprodução
+    for (var x = round(cars.length * 0.1); x < cars.length ; x++) {
 
         //Enche um vetor com  n carros aleatorios
         var rand = floor(random(2,cars.length))
-        Temp3 = new Array() 
-
-        for(y = 0;y <rand; y++ ){
+        checkifRepeat_Array = new Array() 
+        //TEM QUE SER UM WHILE. N pode ter carros repetidos em temp
+        while(bestCars_Array.length < rand){
             var rand2 = floor(random(0,cars.length))
-            if(!Repeated(rand2, Temp3)){
-                Temp.push(cars[rand2])
-
+            if(!Repeated(rand2, checkifRepeat_Array)){
+                bestCars_Array.push(cars[rand2])
             }
-
+            
         }
 
 
         //Ordena e pega os 2 melhores
-        Temp.sort(function(a, b) {
+       bestCars_Array.sort(function(a, b) {
             
             return a.Error - b.Error
             
         }); 
 
-        newCars[x].CopyMov(Reproduction(Temp[0], Temp[1])) 
-        Temp = new Array()
+        newCars[x].CopyMov(Reproduction(bestCars_Array[0], bestCars_Array[1])) 
+        bestCars_Array = new Array()
     }
-    //Fazer a mutaçao
-    var rand = floor(random(0,10))
-    for(var x = floor(cars.length * 0.98); x < cars.length; x++){
-        if(rand < 5 ){
-            var rand2 = floor(random(0,cars[2].movements.length))
-            newCars[x].movements[rand2] = floor(random(0,4))
-        }
-    }
+    
+    
     for (var x = 0; x < cars.length; x++) {
         cars[x].CopyMov(newCars[x])
     }
+
     
     
 }
 function Reproduction(Car1, Car2){
-    var Temp2 = new Car()
+    var newbornCar = new Car()
     var rand = floor(random(0,Car1.movements.length)    )
     for(i = 0; i< rand; i++){   
-        Temp2.movements[i] = Car1.movements[i]
+        newbornCar.movements[i] = Car1.movements[i]
     }
     for(i = rand; i< Car2.movements.length;i++){
-        Temp2.movements[i] = Car2.movements[i]
+        newbornCar.movements[i] = Car2.movements[i]
     }
-    return Temp2
+    return newbornCar
+}
+function Mutation(){
+
+
 }
 function Repeated(rand2, Temp3){
     for(var x =0; x < Temp3.length; x++){

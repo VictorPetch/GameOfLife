@@ -21,9 +21,15 @@ function Board(width = 720, height = 400, w = 40) {
 
     for (var i = 0; i < this.columns; i++) {
         for (var j = 0; j < this.rows; j++) {
-            // Lining the edges with 0s
-            this.board[i][j] = 0;
-            this.next[i][j] = 0;
+            if(j == 0 || j == this.rows -1 || i==0 || i == this.colums -1 ){
+                this.board[i][j] = 1;
+                this.next[i][j] = 1;
+            }
+            else{
+                this.board[i][j] = 0;
+                this.next[i][j] = 0;
+            }
+            
         }
     }
 

@@ -52,7 +52,7 @@ function Car(X =0, Y=0) {
 
     };
     this.Fitness = function(Dest_x, Dest_y){
-        this.Error = abs(Dest_x - this.x) + abs(Dest_y - this.y ) + 1;
+        this.Error = abs(Dest_x - this.x) + abs(Dest_y - this.y );
 
     }
 };
