@@ -1,10 +1,10 @@
-function Car(X = 0, Y = 0, numMov = 60) {
+function Car(X = 0, Y = 0) {
     this.x = X;
     this.y = Y;
-    this.movements = new Array(numMov);
     this.Error = 0;
+    this.movements = new Array(60);
     for (var x = 0; x < this.movements.length; x++) {
-        this.movements[x] = floor(random(4));
+        this.movements[x] = floor(random(3.9));
     }
     this.CopyMov = function (Car) {
         this.movements = Car.movements
@@ -18,23 +18,21 @@ function Car(X = 0, Y = 0, numMov = 60) {
         //de todos os carros 
 
         if (this.movements[w] == 0) {
-            this.x += 1;
+            this.x++;
         }
         else if (this.movements[w] == 2) {
-            this.y += 1;
+            this.y++;
         }
         else if (this.movements[w] == 1) {
-            this.x -= 1;
+            this.x--;
         }
         else if (this.movements[w] == 3) {
-            this.y -= 1;
+            this.y--;
         }
         else return false;
 
     };
-    this.bbb = function () {
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaa")
-    };
+
     this.DesMove = function (w) { //Faz 1 movimento do vetor de movimento 
         //de todos os carros 
         if (this.movements[w] == 0) {
@@ -53,7 +51,8 @@ function Car(X = 0, Y = 0, numMov = 60) {
 
     };
     this.Fitness = function (Dest_x, Dest_y) {
-        this.Error += abs(Dest_x - this.x) + abs(Dest_y - this.y);
+        this.Error = this.Error + abs(Dest_x - this.x) + abs(Dest_y - this.y);
+
 
     }
 };
