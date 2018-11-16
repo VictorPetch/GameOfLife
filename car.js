@@ -18,16 +18,16 @@ function Car(X =0, Y=0 ) {
         //de todos os carros 
 
         if (this.movements[w] == 0) {
-            this.x += 1;
+            this.x ++;
         }
         else if (this.movements[w] == 2) {
-            this.y += 1;
+            this.y ++;
         }
         else if (this.movements[w] == 1) {
-            this.x -= 1;
+            this.x --;
         }
         else if (this.movements[w] == 3) {
-            this.y -= 1;
+            this.y --;
         }
         else return false;
 

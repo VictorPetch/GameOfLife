@@ -5,7 +5,7 @@ var Copy_bool = true;
 var c;
 var Epoch = 0;
 var Num_car = 1;   ;
-var Num_mov = 5;
+var Num_mov = 10;
 var j_global = true;
 var i_global = 0;
 var z_global = 0;
@@ -89,7 +89,7 @@ function keyPressed() {
             console.log("Let's start, shall we?");
             setInterval(function () {
                 Car_draw(i_global);
-                if (i_global > Num_mov) {
+                if (i_global >= Num_mov) {
                     console.log("Acabou a Epoch", Epoch);
                     Epoch++;
                     i_global=0
