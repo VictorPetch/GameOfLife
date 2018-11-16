@@ -102,14 +102,13 @@ Board.prototype.Erase = function(){
     this.erasePoint = createVector(floor(mouseX / this.w), floor(mouseY / this.w))
     this.board[this.erasePoint.x][this.erasePoint.y] = 0
 }
-Board.prototype.Haha = function(i=0){
-    for( i; i<3; i++){
-        console.log(i)
 
-
-    }
-
+Board.prototype.Black = function(){
+    this.erasePoint = createVector(floor(mouseX / this.w), floor(mouseY / this.w))
+    this.board[this.erasePoint.x][this.erasePoint.y] = 1
 }
+
+
 Board.prototype.Copy = function(another_board){
     for(var i=0; i<this.rows; i++){
         for(var j=0; j<this.columns; j++){
