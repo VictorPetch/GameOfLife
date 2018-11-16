@@ -1,11 +1,12 @@
-function Car(X =0, Y=0) {
+function Car(X = 0, Y = 0, numMov = 60) {
     this.x = X;
     this.y = Y;
-    this.movements = new Array(60);
+    this.movements = new Array(numMov);
+    this.Error = 0;
     for (var x = 0; x < this.movements.length; x++) {
         this.movements[x] = floor(random(4));
     }
-    this.CopyMov = function(Car){
+    this.CopyMov = function (Car) {
         this.movements = Car.movements
 
     }
@@ -51,8 +52,8 @@ function Car(X =0, Y=0) {
         else console.log("Wrong directionalMove parameter");
 
     };
-    this.Fitness = function(Dest_x, Dest_y){
-        this.Error = abs(Dest_x - this.x) + abs(Dest_y - this.y );
+    this.Fitness = function (Dest_x, Dest_y) {
+        this.Error += abs(Dest_x - this.x) + abs(Dest_y - this.y);
 
     }
 };
