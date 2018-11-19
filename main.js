@@ -124,7 +124,7 @@ function keyPressed() {
                         cars[i].Batidas =0;
                     }
                    
-                    b.Copy(b_prev.board);
+                    
 
                     //b.Copy(b_prev.board);
                     b.refresh();
@@ -203,16 +203,17 @@ function selection(cars) {
         //Ordena e pega os 2 melhores
         bestCars_Array.sort(function (a, b) {
             return a.Error - b.Error;
-
+        });
         newCars[x].CopyMov(Reproduction(bestCars_Array[0],newCars[rand3])); 
-        bestCars_Array = new Array();
-        }  
+        bestCars_Array = new Array()
+         
+    }
+    
+    for(var x = 0; x < cars.length; x++){
+        cars[x].CopyMov(newCars[x]);
     }
 
-
-    for(var x = 0; x < cars.length; x++) {
-        cars[x].CopyMov(newCars[x])
-    }
+    
 
 
 
@@ -229,7 +230,7 @@ function Reproduction(Car1, Car2) {
         } else newbornCar.movements[i] = Car2.movements[i];
     }
     
-    return newbornCar
+    return newbornCar;  
 }
 function Mutation(cars, newCars) {
     for (var i = round(cars.length * 0.05); i < round(cars.length * 0.1); i++) {
