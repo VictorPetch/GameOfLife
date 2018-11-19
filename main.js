@@ -1,10 +1,10 @@
 
 var b;
-var b_prev;
+//var b_prev;
 var Copy_bool = true;
 var c;
 var Epoch = 0;
-var Num_car = 200;   ;
+var Num_car = 100;
 var Num_mov = 60;
 var j_global = true;
 var i_global = 0;
@@ -25,7 +25,7 @@ var Batidas =0;
 function setup() {
     createCanvas(1280, 640);
     b = new Board(1280, 640, 20);
-    b_prev = new Board(1280, 640, 20)
+    //b_prev = new Board(1280, 640, 20)
 
 
 }
@@ -34,11 +34,11 @@ function draw() {
 
     b.show()
 }
-function mouseDragged(){
+function mouseDragged() {
     if (erase) {
-        
+
         b.Erase();
-    }else if(Black) b.Black();
+    } else if (Black) b.Black();
 }
 function mousePressed() {
     if (addPoint) {
@@ -48,16 +48,16 @@ function mousePressed() {
         b.addDest();
         addDest = !addDest;
     }
-    if (addCar) {                         
+    if (addCar) {
         b.addCarPoint();
         for (var i = 0; i < Num_car; i++) {
-            cars.push(new Car(b.startPoint.x, b.startPoint.y));
+            cars.push(new Car(b.startPoint.x, b.startPoint.y, Num_mov));
 
 
         };
         addCar = !addCar;
     }
-   
+
 
 
 
@@ -82,7 +82,9 @@ function keyPressed() {
         erase = !erase
     } else if (keyCode == 83) { // S
         if (Copy_bool) {
-            b_prev.Copy(b.board)
+            //b_prev.Copy(b.board)
+            b.store();
+            //b_prev.board = b.board.slice(0)
             Copy_bool = false;
         }
 
@@ -115,7 +117,7 @@ function keyPressed() {
                     selection(cars);
 
 
-                    for(var i=0; i<Num_car; i++){ // Leva todos os carros pro ponto inicial e zera o Error
+                    for (var i = 0; i < Num_car; i++) { // Leva todos os carros pro ponto inicial
                         cars[i].x = b.startPoint.x;
                         cars[i].y = b.startPoint.y;
                         cars[i].Error = 0;
@@ -124,6 +126,9 @@ function keyPressed() {
                    
                     b.Copy(b_prev.board);
 
+                    //b.Copy(b_prev.board);
+                    b.refresh();
+                    //b.board = b_prev.board.slice(0);
 
                 } else i_global++
 
@@ -141,9 +146,13 @@ function keyPressed() {
 }
 
 function Car_draw() {
+
+    //b.Copy(b_prev.board);
+    b.refresh();
+    //b.board = b_prev.board.slice(0)
     for (var i = 0; i < Num_car; i++) {
 
-        b.board[cars[i].x][cars[i].y] = b_prev.board[cars[i].x][cars[i].y];
+        //b.board[cars[i].x][cars[i].y] = b_prev.board[cars[i].x][cars[i].y];
         cars[i].directionalMove(i_global)
         
         
@@ -158,7 +167,7 @@ function Car_draw() {
 
 
     }
-    
+
 }
 function selection(cars) {
     bestCars_Array = new Array()
@@ -169,47 +178,48 @@ function selection(cars) {
         newCars[i] = new Car(cars[i].x, cars[i].y);
         newCars[i].CopyMov(cars[i])
     }
-       
-        
+
+
     //Mutação - começa em 5% e termina em 10% do vetor de newCars
-    Mutation(cars,newCars);
+    Mutation(cars, newCars);
 
     //Reprodução - Começa em 10% e vai até o fim do vetor
-    for (var x = round(cars.length * 0.1); x < cars.length ; x++) {
+    for (var x = round(cars.length * 0.1); x < cars.length; x++) {
 
         //Enche um vetor com  n carros aleatorios
         var rand = floor(random(2,cars.length))
         var rand3 = floor(random(0,floor(cars.length*0.3)))
         checkifRepeat_Array = new Array() 
         //TEM QUE SER UM WHILE. N pode ter carros repetidos em temp
-        while(bestCars_Array.length < rand){
-            var rand2 = floor(random(0,cars.length))
-            if(!Repeated(rand2, checkifRepeat_Array)){
+        while (bestCars_Array.length < rand) {
+            var rand2 = floor(random(0, cars.length))
+            if (!Repeated(rand2, checkifRepeat_Array)) {
                 bestCars_Array.push(cars[rand2])
             }
-            
+
         }
 
 
         //Ordena e pega os 2 melhores
-        bestCars_Array.sort(function(a, b) {
-            return a.Error - b.Error
-            
-        }); 
+        bestCars_Array.sort(function (a, b) {
+            return a.Error - b.Error;
 
-        newCars[x].CopyMov(Reproduction(bestCars_Array[0],newCars[rand3])) 
-        bestCars_Array = new Array()
+        newCars[x].CopyMov(Reproduction(bestCars_Array[0],newCars[rand3])); 
+        bestCars_Array = new Array();
+        }  
     }
-    
-    
-    for (var x = 0; x < cars.length; x++) {
+
+
+    for(var x = 0; x < cars.length; x++) {
         cars[x].CopyMov(newCars[x])
     }
 
-    
-    
+
+
+
 }
-function Reproduction(Car1, Car2){
+
+function Reproduction(Car1, Car2) {
     var newbornCar = new Car()
     var rand = floor(random(0,Car1.movements.length))
     for(var i = 0; i < newbornCar.movements.length; i++){
@@ -221,22 +231,21 @@ function Reproduction(Car1, Car2){
     
     return newbornCar
 }
-function Mutation(cars, newCars){
-    for(var i=round(cars.length * 0.05); i < round(cars.length * 0.1); i++){
-        var rand1 = floor(random(0,cars.length - 0.1));
-        var rand2 = round(random(0,cars[2].movements.length));
-        cars[rand1].movements[rand2] = floor(random(0,3.5))
-        if(cars[rand1].movements[rand2] > 3) window.alert(cars[rand1].movements[rand2])
+function Mutation(cars, newCars) {
+    for (var i = round(cars.length * 0.05); i < round(cars.length * 0.1); i++) {
+        var rand1 = floor(random(0, cars.length - 0.1));
+        var rand2 = round(random(0, cars[2].movements.length));
+        cars[rand1].movements[rand2] = floor(random(0, 3.5))
+        if (cars[rand1].movements[rand2] > 3) window.alert(cars[rand1].movements[rand2])
         newCars[i] = cars[rand1];
 
     }
 }
 
-function Repeated(rand2, Temp3){
-    for(var x =0; x < Temp3.length; x++){
-        if(Temp3[x] == rand2) return true
-        
+function Repeated(rand2, Temp3) {
+    for (var x = 0; x < Temp3.length; x++) {
+        if (Temp3[x] == rand2) return true
+
     }
     return false;
 }
-cars.sort()

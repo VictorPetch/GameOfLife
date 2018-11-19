@@ -14,22 +14,22 @@ function Board(width = 720, height = 400, w = 40) {
     }
 
     // Dont know if that is necessary but im adding
-    this.next = new Array(this.columns);
+    this.prev = new Array(this.columns);
     for (i = 0; i < this.columns; i++) {
-        this.next[i] = new Array(this.rows);
+        this.prev[i] = new Array(this.rows);
     }
 
     for (var i = 0; i < this.columns; i++) {
         for (var j = 0; j < this.rows; j++) {
-            if(j == 0 || j == this.rows -1 || i==0 || i == this.colums -1 ){
+            if (j == 0 || j == this.rows - 1 || i == 0 || i == this.columns - 1) {
                 this.board[i][j] = 1;
-                this.next[i][j] = 1;
+                this.prev[i][j] = 1;
             }
-            else{
+            else {
                 this.board[i][j] = 0;
-                this.next[i][j] = 0;
+                this.prev[i][j] = 0;
             }
-            
+
         }
     }
 
@@ -45,7 +45,7 @@ Board.prototype.show = function () {
             //console.log(this.board[i][j])
             if ((this.board[i][j] == 1)) fill(0);
             else if ((this.board[i][j] == 0)) fill(255);
-            else if ((this.board[i][j] == 2)) fill(255,0,0);
+            else if ((this.board[i][j] == 2)) fill(255, 0, 0);
             else if (this.board[i][j] == 3) fill(0, 255, 0);
             else if (this.board[i][j] == 5) fill(255, 255, 0);
             else fill(0,0,255);
@@ -57,11 +57,25 @@ Board.prototype.show = function () {
 
 }
 
+Board.prototype.store = function () {
+
+    for (i = 0; i < this.columns; i++) {
+        this.prev[i] = this.board[i].slice(0);
+    }
+}
+
+Board.prototype.refresh = function () {
+
+    for (i = 0; i < this.columns; i++) {
+        this.board[i] = this.prev[i].slice(0);
+    }
+}
+
 Board.prototype.addPoint = function () {
 
     this.points.push(createVector(floor(mouseX / this.w), floor(mouseY / this.w)))
     for (var x = 0; x < this.points.length; x++) {
-        
+
         for (var i = 0; i < this.rows; i++) {
             this.board[this.points[x].x][i] = 1
         }
@@ -73,16 +87,9 @@ Board.prototype.addPoint = function () {
 }
 
 Board.prototype.RandomSquare = function () {
-    console.log(this.points)
-    this.points.push(createVector(floor(mouseX / this.w), floor(mouseY / this.w)))
-    for (var i = this.points.length -1; i < this.points.length; i++) {
-
-        for(var j = this.points[i].x -15; j< this.points[i].x +15; j++){
-
-            for(var k = this.points[i].y -15; k < this.points[i].y+15; k++){
-                 this.board[j][k] = floor(random(0,2))
-            }
-
+    for (var i = 1; i < this.columns - 1; i++) {
+        for (var j = 1; j < this.rows - 1; j++) {
+            this.board[i][j] = floor(random(0, 2))
         }
     }
 
@@ -93,26 +100,26 @@ Board.prototype.addDest = function () {
 
 }
 
-Board.prototype.addCarPoint = function() {
+Board.prototype.addCarPoint = function () {
     this.startPoint = createVector(floor(mouseX / this.w), floor(mouseY / this.w))
     console.log(this.startPoint);
     this.board[this.startPoint.x][this.startPoint.y] = 3
 }
 
-Board.prototype.Erase = function(){
+Board.prototype.Erase = function () {
     this.erasePoint = createVector(floor(mouseX / this.w), floor(mouseY / this.w))
     this.board[this.erasePoint.x][this.erasePoint.y] = 0
 }
 
-Board.prototype.Black = function(){
+Board.prototype.Black = function () {
     this.erasePoint = createVector(floor(mouseX / this.w), floor(mouseY / this.w))
     this.board[this.erasePoint.x][this.erasePoint.y] = 1
 }
 
 
-Board.prototype.Copy = function(another_board){
-    for(var i=0; i<this.rows; i++){
-        for(var j=0; j<this.columns; j++){
+Board.prototype.Copy = function (another_board) {
+    for (var i = 0; i < this.rows; i++) {
+        for (var j = 0; j < this.columns; j++) {
             this.board[i][j] = another_board[i][j]
         }
     }
