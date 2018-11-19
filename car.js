@@ -3,7 +3,8 @@ function Car(X = 0, Y = 0) {
     this.y = Y;
     this.Error =0;
     this.Batidas =0;
-    this.movements = new Array(60);
+    this.Redundancias =0;
+    this.movements = new Array(100);
     for (var x = 0; x < this.movements.length; x++) {
         this.movements[x] = floor(random(3.9));
     }
@@ -52,7 +53,7 @@ function Car(X = 0, Y = 0) {
 
     };
     this.Fitness = function (Dest_x, Dest_y) {
-        this.Error = this.Error + abs(Dest_x - this.x) + abs(Dest_y - this.y);
+        this.Error = (this.Error + abs(Dest_x - this.x) + abs(Dest_y - this.y))*3;
 
 
     }

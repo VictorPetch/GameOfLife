@@ -1,11 +1,12 @@
 
 var b;
 //var b_prev;
+var flag =0;
 var Copy_bool = true;
 var c;
 var Epoch = 0;
 var Num_car = 100;
-var Num_mov = 60;
+var Num_mov = 5;
 var j_global = true;
 var i_global = 0;
 var z_global = 0;
@@ -96,24 +97,29 @@ function keyPressed() {
                     console.log("Acabou a Epoch", Epoch);
                     Epoch++;
                     i_global=0
-                   
-                    for(var i=0; i<Num_car; i++) { //Faz a fitness de todos os carros
+                    //Aumenta o numero de movimentos permitidos
+                    Num_mov = ceil(Epoch/5)*5 
+                    if(Epoch > 10 && flag==1){
+                       
+                    }
+                    //Faz a fitness de todos os carros
+                    for(var i=0; i<Num_car; i++) { 
                         cars[i].Fitness(b.destination.x, b.destination.y)     
                     }
-                   
-                    
-                    
+                    //Faz o erro de ir e voltar
+                    VaieVoltaError(cars);
+
                     cars.sort(function(a, b) {
                         return a.Error - b.Error;
                     }); 
-                    b.board[cars[0].x][cars[0].y] = 5
-                    b.show()
-                    window.alert("Batidas")
-                    window.alert(cars[0].Batidas)
-                    window.alert("Error")
-                    window.alert(cars[0].Error)
-                    window.alert(cars[1].Error)
-                    window.alert(cars[cars.length -1].Error)
+                   // window.alert("Redundancias")
+                   // window.alert(cars[0].Redundancias)
+                   // window.alert("Batidas")
+                   // window.alert(cars[0].Batidas)
+                   // window.alert("Error")
+                   // window.alert(cars[0].Error)
+                   // window.alert(cars[1].Error)
+                   // window.alert(cars[cars.length -1].Error)
                     selection(cars);
 
 
@@ -122,6 +128,7 @@ function keyPressed() {
                         cars[i].y = b.startPoint.y;
                         cars[i].Error = 0;
                         cars[i].Batidas =0;
+                        cars[i].Redundancias = 0;
                     }
                    
                     
@@ -144,7 +151,20 @@ function keyPressed() {
 
     }//else console.log("Acho que faltou o StartPoint");
 }
+function VaieVoltaError(cars){
+    for(var i = 0; i < cars.length; i++){
+        for(var j = 0; j < Num_mov -1; j++){
+            var z = j+1;
+            if( abs(cars[i].movements[j] - cars[i].movements[z]) == 1 
+            & (cars[i].movements[j] == 3 || cars[i].movements[z] == 3 ||
+            cars[i].movements[j] == 0 || cars[i].movements[z] == 0) ){
+                cars[i].Error+= 2;
+                cars[i].Redundancias++;
+            }
+        }
+    }
 
+}
 function Car_draw() {
 
     //b.Copy(b_prev.board);
@@ -154,10 +174,6 @@ function Car_draw() {
 
         //b.board[cars[i].x][cars[i].y] = b_prev.board[cars[i].x][cars[i].y];
         cars[i].directionalMove(i_global)
-        
-        
-        
-        
         if (b.board[cars[i].x][cars[i].y] == 1) {
             cars[i].Error += 2;
             cars[i].Batidas ++;
@@ -222,8 +238,8 @@ function selection(cars) {
 
 function Reproduction(Car1, Car2) {
     var newbornCar = new Car()
-    var rand = floor(random(0,Car1.movements.length))
-    for(var i = 0; i < newbornCar.movements.length; i++){
+    var rand = floor(random(0,Num_mov))
+    for(var i = 0; i < Num_mov; i++){
         
         if(round(random(0,1)) == 0 ){
             newbornCar.movements[i] = Car1.movements[i];
@@ -235,7 +251,7 @@ function Reproduction(Car1, Car2) {
 function Mutation(cars, newCars) {
     for (var i = round(cars.length * 0.05); i < round(cars.length * 0.1); i++) {
         var rand1 = floor(random(0, cars.length - 0.1));
-        var rand2 = round(random(0, cars[2].movements.length));
+        var rand2 = round(random(0, Num_mov));
         cars[rand1].movements[rand2] = floor(random(0, 3.5))
         if (cars[rand1].movements[rand2] > 3) window.alert(cars[rand1].movements[rand2])
         newCars[i] = cars[rand1];
