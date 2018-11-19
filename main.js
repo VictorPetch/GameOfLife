@@ -4,8 +4,8 @@ var b_prev;
 var Copy_bool = true;
 var c;
 var Epoch = 0;
-var Num_car = 1;   ;
-var Num_mov = 10;
+var Num_car = 200;   ;
+var Num_mov = 60;
 var j_global = true;
 var i_global = 0;
 var z_global = 0;
@@ -19,6 +19,7 @@ var CarPoint = p5.Vector.random2D()
 var cars = [];
 var fitness = [];
 var Error = [];
+var Batidas =0;
 
 
 function setup() {
@@ -94,21 +95,23 @@ function keyPressed() {
                     Epoch++;
                     i_global=0
                    
-                    for(var i=0; i<Num_car; i++){ //Faz a fitness de todos os carros
+                    for(var i=0; i<Num_car; i++) { //Faz a fitness de todos os carros
                         cars[i].Fitness(b.destination.x, b.destination.y)     
                     }
-                    window.alert("Acabou a Epoch")
-                    window.alert(b.destination.x)
-                    window.alert(b.destination.y)
-                    window.alert(cars[0].x)
-                    window.alert(cars[0].y)
-                    window.alert(cars[0].Error)
+                   
                     
                     
                     cars.sort(function(a, b) {
                         return a.Error - b.Error;
                     }); 
-                    
+                    b.board[cars[0].x][cars[0].y] = 5
+                    b.show()
+                    window.alert("Batidas")
+                    window.alert(cars[0].Batidas)
+                    window.alert("Error")
+                    window.alert(cars[0].Error)
+                    window.alert(cars[1].Error)
+                    window.alert(cars[cars.length -1].Error)
                     selection(cars);
 
 
@@ -116,16 +119,16 @@ function keyPressed() {
                         cars[i].x = b.startPoint.x;
                         cars[i].y = b.startPoint.y;
                         cars[i].Error = 0;
+                        cars[i].Batidas =0;
                     }
-                    window.alert("Resetou o Error")
-                    window.alert(cars[0].Error)
+                   
                     b.Copy(b_prev.board);
 
 
                 } else i_global++
 
 
-            }, 200);
+            }, 30);
 
         }
 
@@ -142,18 +145,15 @@ function Car_draw() {
 
         b.board[cars[i].x][cars[i].y] = b_prev.board[cars[i].x][cars[i].y];
         cars[i].directionalMove(i_global)
-        if(i==0){
-            window.alert(cars[0].x)
-        }
+        
         
         
         
         if (b.board[cars[i].x][cars[i].y] == 1) {
-            cars[i].Error ++;
-            window.alert("Bateu na parede")
-            //window.alert(cars[0].Error)
+            cars[i].Error += 2;
+            cars[i].Batidas ++;
             cars[i].DesMove(i_global);
-            b.board[cars[i].x][cars[i].y] = 4
+            b.board[cars[i].x][cars[i].y] = 4;
         } else b.board[cars[i].x][cars[i].y] = 4;
 
 
@@ -179,6 +179,7 @@ function selection(cars) {
 
         //Enche um vetor com  n carros aleatorios
         var rand = floor(random(2,cars.length))
+        var rand3 = floor(random(0,floor(cars.length*0.3)))
         checkifRepeat_Array = new Array() 
         //TEM QUE SER UM WHILE. N pode ter carros repetidos em temp
         while(bestCars_Array.length < rand){
@@ -196,7 +197,7 @@ function selection(cars) {
             
         }); 
 
-        newCars[x].CopyMov(Reproduction(bestCars_Array[0], bestCars_Array[1])) 
+        newCars[x].CopyMov(Reproduction(bestCars_Array[0],newCars[rand3])) 
         bestCars_Array = new Array()
     }
     
@@ -210,13 +211,14 @@ function selection(cars) {
 }
 function Reproduction(Car1, Car2){
     var newbornCar = new Car()
-    var rand = floor(random(0,Car1.movements.length)    )
-    for(i = 0; i< rand; i++){   
-        newbornCar.movements[i] = Car1.movements[i]
+    var rand = floor(random(0,Car1.movements.length))
+    for(var i = 0; i < newbornCar.movements.length; i++){
+        
+        if(round(random(0,1)) == 0 ){
+            newbornCar.movements[i] = Car1.movements[i];
+        } else newbornCar.movements[i] = Car2.movements[i];
     }
-    for(i = rand; i< Car2.movements.length;i++){
-        newbornCar.movements[i] = Car2.movements[i]
-    }
+    
     return newbornCar
 }
 function Mutation(cars, newCars){

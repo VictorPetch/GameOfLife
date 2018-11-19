@@ -2,6 +2,7 @@ function Car(X =0, Y=0 ) {
     this.x = X;
     this.y = Y;
     this.Error =0;
+    this.Batidas =0;
     this.movements = new Array(60);
     for (var x = 0; x < this.movements.length; x++) {
         this.movements[x] = floor(random(3.9));

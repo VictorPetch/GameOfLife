@@ -47,6 +47,7 @@ Board.prototype.show = function () {
             else if ((this.board[i][j] == 0)) fill(255);
             else if ((this.board[i][j] == 2)) fill(255,0,0);
             else if (this.board[i][j] == 3) fill(0, 255, 0);
+            else if (this.board[i][j] == 5) fill(255, 255, 0);
             else fill(0,0,255);
 
             stroke(0);
