@@ -1,1 +1,1 @@
-# Game of life made on P5 but with genetic algorithm
+# Demonstration of a genetic algorithm example based on the game of life using p5.
